@@ -13,8 +13,7 @@ ADD requirements.txt .
 RUN pip install -r requirements.txt
 RUN mkdir /root/polyglot_data
 RUN polyglot download embeddings2.en ner2.en
-VOLUME /root/polyglot_data
 ADD app.py .
 ENV FLASK_APP app.py
 ENV FLASK_DEBUG 0
-CMD flask run --host 0.0.0.0 --port 5001
+CMD flask run --host 0.0.0.0 --port 5001 --with-threads
