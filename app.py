@@ -9,8 +9,8 @@ from datetime import timedelta
 from flask import make_response, request, current_app
 from functools import update_wrapper
 
-supportedLanguagesNer = [name for name in os.listdir("/root/polyglot_data/ner2")]
-supportedLanguagesEmbeddings = [name for name in os.listdir("/root/polyglot_data/embeddings2")]
+supported_ner = [name for name in os.listdir("/root/polyglot_data/ner2")]
+supported_embeddings = [name for name in os.listdir("/root/polyglot_data/embeddings2")]
 
 class InvalidUsage(Exception):
     status_code = 400
@@ -94,9 +94,9 @@ def analyze():
         try:
             docdata = request.get_json();
             lang = docdata["lang"]
-            if lang not in supportedLanguagesNer:
+            if lang not in supported_ner:
                 raise InvalidUsage("No ner2 model for: " + lang, status_code=404)
-            if lang not in supportedLanguagesEmbeddings:
+            if lang not in supported_embeddings:
                 raise InvalidUsage("No embeddings2 model for: " + lang, status_code=404)
             chunker = polyglot.tag.NEChunker(lang = lang)
 
@@ -109,4 +109,5 @@ def analyze():
         return jsonify({'result': result})
 
 if __name__ == "__main__":
-    app.run()
+    app.run(threaded = True)
+
